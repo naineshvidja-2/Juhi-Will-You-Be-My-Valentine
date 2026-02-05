@@ -73,7 +73,7 @@ window.addEventListener("DOMContentLoaded", () => {
 
     // ---------- Letter ----------
     document.getElementById("letterTitle").textContent = config.letter.title;
-    document.getElementById("letterText").textContent = config.letter.text;
+    document.getElementById("letterText").innerText = config.letter.text;
 
     // Set first question texts
     document.getElementById("question1Text").textContent = config.questions.first.text;
@@ -164,43 +164,42 @@ function renderMemory(memoryIndex) {
     const questionEl = document.getElementById("memoryQuestion");
     const optionsEl = document.getElementById("memoryOptions");
     const revealEl = document.getElementById("memoryReveal");
+    const nextBtn = document.getElementById("memoryNextBtn");
 
     questionEl.textContent = memory.question;
     optionsEl.innerHTML = "";
+    optionsEl.style.display = "flex";
+
     revealEl.classList.add("hidden");
     revealEl.textContent = "";
+    nextBtn.classList.add("hidden");
 
     memory.options.forEach((option) => {
         const btn = document.createElement("button");
         btn.className = "cute-btn";
         btn.textContent = option.label;
 
-        let timeout = 5000;
-        if (currentMemoryIndex === config.memories.length - 1) {
-            timeout = 10000;
-        }
-
         btn.onclick = () => {
-            memoryHistory.push(currentMemoryIndex);
-
             optionsEl.style.display = "none";
             revealEl.textContent = option.reveal;
             revealEl.classList.remove("hidden");
-
-            setTimeout(() => {
-                optionsEl.style.display = "flex";
-                currentMemoryIndex++;
-
-                if (currentMemoryIndex < config.memories.length) {
-                    renderMemory(currentMemoryIndex);
-                } else {
-                    showNextQuestion(6); // Letter
-                }
-            }, timeout);
+            nextBtn.classList.remove("hidden");
         };
 
         optionsEl.appendChild(btn);
     });
+}
+
+function goToNextMemory() {
+    currentMemoryIndex++;
+
+    document.getElementById("memoryNextBtn").classList.add("hidden");
+
+    if (currentMemoryIndex < config.memories.length) {
+        renderMemory(currentMemoryIndex);
+    } else {
+        showNextQuestion(6);
+    }
 }
 
 function goBack() {
@@ -240,6 +239,20 @@ function toggleBackButton() {
     }
 }
 
+let noClickCount = 0;
+
+function handleNo() {
+    const textEl = document.getElementById("noResponseText");
+    const messages = config.finalNoResponses;
+    const length = messages.length;
+
+    textEl.classList.remove("hidden");
+
+    textEl.textContent = messages[Math.min(noClickCount, length - 1)];
+
+    noClickCount = (noClickCount + 1) % length;
+}
+
 // Function to move the "No" button when clicked
 function moveButton(button) {
     const x = Math.random() * (window.innerWidth - button.offsetWidth);
@@ -272,7 +285,7 @@ function decreaseButtonSize(button, step = 0.08, minScale = 0) {
 }
 
 attachDodgeBehavior(document.getElementById("noBtn1"));
-attachDodgeBehavior(document.getElementById("noBtn3"));
+// attachDodgeBehavior(document.getElementById("noBtn3"));
 
 // Love meter functionality
 const loveMeter = document.getElementById("loveMeter");
@@ -321,16 +334,20 @@ window.addEventListener("load", setInitialPosition);
 // Celebration function
 function celebrate() {
     document.querySelectorAll(".question-section").forEach((q) => q.classList.add("hidden"));
+    document.getElementById("backBtn").classList.add("hidden");
     const celebration = document.getElementById("celebration");
     celebration.classList.remove("hidden");
-
-    // Set celebration messages
     document.getElementById("celebrationTitle").textContent = config.celebration.title;
     document.getElementById("celebrationMessage").textContent = config.celebration.message;
     document.getElementById("celebrationEmojis").textContent = config.celebration.emojis;
 
-    // Create heart explosion effect
+    // Heart explosion first
     createHeartExplosion();
+
+    // Then show the teddy/kiss GIF after a short pause
+    setTimeout(() => {
+        document.getElementById("celebrationGifWrapper").classList.remove("hidden");
+    }, 1800);
 }
 
 // Create heart explosion animation

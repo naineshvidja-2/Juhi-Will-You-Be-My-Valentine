@@ -60,17 +60,11 @@
                 <h2 id="memoryQuestion"></h2>
                 <div id="memoryOptions" class="memory-options"></div>
                 <div id="memoryReveal" class="memory-reveal hidden"></div>
-            </div>
-
-            <!-- Letter -->
-            <div class="question-section hidden" id="question6">
-                <h2 id="letterTitle"></h2>
-                <p id="letterText"></p>
-                <button class="cute-btn special" onclick="showNextQuestion(7)">Continue ❤️</button>
+                <button id="memoryNextBtn" class="cute-btn special hidden" onclick="goToNextMemory()">Next →</button>
             </div>
 
             <!-- Love Meter -->
-            <div class="question-section hidden" id="question7">
+            <div class="question-section hidden" id="question6">
                 <h2 id="question2Text"></h2>
                 <!-- Love meter settings: min="0" max="10000" -->
                 <div class="love-meter">
@@ -80,14 +74,23 @@
                         <span id="extraLove" class="hidden"></span>
                     </p>
                 </div>
-                <button class="cute-btn" onclick="showNextQuestion(8)" id="nextBtn"></button>
+                <button class="cute-btn" onclick="showNextQuestion(7)" id="nextBtn"></button>
+            </div>
+
+            <!-- Letter -->
+            <div class="question-section hidden" id="question7">
+                <h2 id="letterTitle"></h2>
+                <p id="letterText"></p>
+                <button class="cute-btn special" onclick="showNextQuestion(8)">Are you ready ? ❤️</button>
             </div>
 
             <!-- Valentine Question -->
             <div class="question-section hidden" id="question8">
                 <h2 id="question3Text"></h2>
                 <button class="cute-btn final-yes" onclick="celebrate()" id="yesBtn3"></button>
-                <button class="cute-btn" id="noBtn3"></button>
+                <button class="cute-btn" id="noBtn3" onclick="handleNo()"></button>
+
+                <p id="noResponseText" class="no-response hidden"></p>
             </div>
 
             <!-- Celebration -->
@@ -95,6 +98,11 @@
                 <h2 id="celebrationTitle"></h2>
                 <p id="celebrationMessage" class="celebration-text"></p>
                 <p id="celebrationEmojis" class="celebration-text"></p>
+
+                <!-- Teddy / Kiss GIF -->
+                <div id="celebrationGifWrapper" class="celebration-gif hidden">
+                    <img src="assets/dance-kiss-video.gif" alt="A warm hug" class="celebration-gif-img" />
+                </div>
             </div>
         </div>
 
