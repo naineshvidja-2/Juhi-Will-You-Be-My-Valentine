@@ -344,6 +344,27 @@ function celebrate() {
     // Heart explosion first
     createHeartExplosion();
 
+    // 🔊 Handle audio transition for celebration
+    const bgMusic = document.getElementById("bgMusic");
+    const celebrationAudio = document.getElementById("celebrationAudio");
+
+    // Pause background music if playing
+    if (bgMusic && !bgMusic.paused) {
+        bgMusic.pause();
+    }
+
+    // Play celebration audio in loop at low volume
+    if (celebrationAudio) {
+        celebrationAudio.pause(); // safety reset
+        celebrationAudio.currentTime = 0;
+        celebrationAudio.loop = true;
+        celebrationAudio.volume = 0.35; // low & warm (0.25–0.4 sweet spot)
+
+        celebrationAudio.play().catch(() => {
+            console.log("Celebration audio autoplay blocked");
+        });
+    }
+
     // Then show the teddy/kiss GIF after a short pause
     setTimeout(() => {
         document.getElementById("celebrationGifWrapper").classList.remove("hidden");
